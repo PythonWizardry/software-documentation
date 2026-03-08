@@ -1,0 +1,103 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36" version="29.6.1">
+  <diagram name="Сторінка-1" id="QpT8NkH3xcaaOFnIeMbH">
+    <mxGraphModel dx="906" dy="458" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Ye3gZv_9K3kj_gDbE4Gt-7" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="User" vertex="1">
+          <mxGeometry height="390" width="120" x="40" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Ye3gZv_9K3kj_gDbE4Gt-27" parent="Ye3gZv_9K3kj_gDbE4Gt-7" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="" vertex="1">
+          <mxGeometry height="200" width="10" x="55" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="Ye3gZv_9K3kj_gDbE4Gt-8" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="Mobile Device /&amp;nbsp;&lt;div&gt;Play App&lt;/div&gt;" vertex="1">
+          <mxGeometry height="390" width="120" x="250" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Ye3gZv_9K3kj_gDbE4Gt-13" parent="Ye3gZv_9K3kj_gDbE4Gt-8" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="" vertex="1">
+          <mxGeometry height="200" width="10" x="55" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="Ye3gZv_9K3kj_gDbE4Gt-31" edge="1" parent="Ye3gZv_9K3kj_gDbE4Gt-8" source="Ye3gZv_9K3kj_gDbE4Gt-13" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" target="Ye3gZv_9K3kj_gDbE4Gt-13" value=" Install Application()">
+          <mxGeometry relative="1" width="80" x="0.5926" y="-10" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="180" y="190" />
+            </Array>
+            <mxPoint x="80" y="149.85" as="sourcePoint" />
+            <mxPoint x="160" y="149.85" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ye3gZv_9K3kj_gDbE4Gt-9" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="Google Play Server" vertex="1">
+          <mxGeometry height="390" width="120" x="460" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Ye3gZv_9K3kj_gDbE4Gt-20" parent="Ye3gZv_9K3kj_gDbE4Gt-9" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="" vertex="1">
+          <mxGeometry height="30" width="10" x="55" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="Ye3gZv_9K3kj_gDbE4Gt-10" parent="1" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="User Cloud Profile" vertex="1">
+          <mxGeometry height="390" width="120" x="670" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Ye3gZv_9K3kj_gDbE4Gt-28" parent="Ye3gZv_9K3kj_gDbE4Gt-10" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" value="" vertex="1">
+          <mxGeometry height="50" width="10" x="55" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="Ye3gZv_9K3kj_gDbE4Gt-18" edge="1" parent="1" source="Ye3gZv_9K3kj_gDbE4Gt-27" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;entryX=0.098;entryY=-0.003;entryDx=0;entryDy=0;entryPerimeter=0;" target="Ye3gZv_9K3kj_gDbE4Gt-13" value="Click &quot;Install&quot;">
+          <mxGeometry relative="1" width="80" as="geometry">
+            <mxPoint x="110" y="90" as="sourcePoint" />
+            <mxPoint x="230" y="90" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ye3gZv_9K3kj_gDbE4Gt-19" edge="1" parent="1" source="Ye3gZv_9K3kj_gDbE4Gt-13" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;entryX=-0.002;entryY=0.002;entryDx=0;entryDy=0;entryPerimeter=0;" target="Ye3gZv_9K3kj_gDbE4Gt-20" value="Request App Download(appId)">
+          <mxGeometry relative="1" width="80" as="geometry">
+            <mxPoint x="350" y="130" as="sourcePoint" />
+            <mxPoint x="430" y="130" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ye3gZv_9K3kj_gDbE4Gt-21" edge="1" parent="1" source="Ye3gZv_9K3kj_gDbE4Gt-20" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;exitX=-0.01;exitY=1.001;exitDx=0;exitDy=0;exitPerimeter=0;" target="Ye3gZv_9K3kj_gDbE4Gt-13" value="Send App Data (APK)">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="140" as="sourcePoint" />
+            <mxPoint x="320" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ye3gZv_9K3kj_gDbE4Gt-23" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=block;curved=0;rounded=0;" value="Save to Download History(appId, date)">
+          <mxGeometry relative="1" width="80" x="0.4878" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="315" y="220" as="sourcePoint" />
+            <mxPoint x="725" y="220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ye3gZv_9K3kj_gDbE4Gt-25" edge="1" parent="1" source="Ye3gZv_9K3kj_gDbE4Gt-28" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;exitX=-0.113;exitY=0.999;exitDx=0;exitDy=0;exitPerimeter=0;" target="Ye3gZv_9K3kj_gDbE4Gt-8" value="Confirm Save Success">
+          <mxGeometry relative="1" x="0.3518" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="630" y="240" as="sourcePoint" />
+            <mxPoint x="550" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ye3gZv_9K3kj_gDbE4Gt-32" parent="1" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" value="alt" vertex="1">
+          <mxGeometry height="290" width="400" x="150" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="Ye3gZv_9K3kj_gDbE4Gt-33" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Terms Accepted" vertex="1">
+          <mxGeometry height="30" width="80" x="140" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="Ye3gZv_9K3kj_gDbE4Gt-34" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Terms Rejected" vertex="1">
+          <mxGeometry height="30" width="60" x="150" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="Ye3gZv_9K3kj_gDbE4Gt-35" edge="1" parent="1" style="endArrow=none;dashed=1;html=1;rounded=0;entryX=1.004;entryY=0.699;entryDx=0;entryDy=0;entryPerimeter=0;" target="Ye3gZv_9K3kj_gDbE4Gt-32" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="150" y="303" as="sourcePoint" />
+            <mxPoint x="370" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ye3gZv_9K3kj_gDbE4Gt-36" edge="1" parent="1" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;entryX=0.006;entryY=0.896;entryDx=0;entryDy=0;entryPerimeter=0;" value="Cancel Installation">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="307.0999999999999" y="380.00000000000006" as="sourcePoint" />
+            <mxPoint x="149.99999999999997" y="380.00000000000006" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ye3gZv_9K3kj_gDbE4Gt-37" edge="1" parent="1" source="Ye3gZv_9K3kj_gDbE4Gt-13" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;exitX=0.384;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" target="Ye3gZv_9K3kj_gDbE4Gt-27" value="Display &quot;App Installed&quot;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="290" as="sourcePoint" />
+            <mxPoint x="180" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
