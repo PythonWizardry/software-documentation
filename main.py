@@ -28,6 +28,7 @@ def main() -> None:
     args = parser.parse_args()
 
     if args.generate:
+        print(f"Generating CSV with {args.rows} rows at {args.csv}...")
         output = CSVGenerator(filepath=args.csv, rows=args.rows).generate_csv()
         print(f"CSV generated: {output}")
 
@@ -41,6 +42,7 @@ def main() -> None:
 
 
     service = build_service(args.csv)
+    print("Starting import process...")
     service.run_import()
     print("Import completed successfully.")
 
