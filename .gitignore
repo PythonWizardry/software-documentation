@@ -3,5 +3,11 @@ venv/
 ENV/
 __pycache__/
 *.py[cod]
-*.db
 test_main.py
+
+
+# database file
+# *.db
+
+# generated csv file
+# data/*.csv

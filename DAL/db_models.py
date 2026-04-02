@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Date, Float, Table
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+from .interfaces import IDBModels
 
 
 Base = declarative_base()
@@ -147,3 +148,9 @@ class Transaction(Base):
 	customer = relationship("Customer", back_populates="transactions")
 	paid_application = relationship("PaidApplication", back_populates="transactions")
 
+class DBModels(IDBModels):
+    def __init__(self, engine):
+        self.engine = engine
+
+    def create_tables(self):
+        Base.metadata.create_all(self.engine)
