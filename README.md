@@ -35,7 +35,7 @@ This project implements a 3-layer server-side architecture for importing app sto
 2. Install dependencies:
 
 ```bash
-pip install -r requirements.txt.
+pip install -r requirements.txt
 ```
 
 3. Run full flow (generate CSV + import to DB):
@@ -44,11 +44,47 @@ pip install -r requirements.txt.
 python main.py --generate --rows 1000
 ```
 
+Example with custom delimiter (`;`):
+
+```bash
+python main.py --generate --rows 1000 --delimiter ";" --csv data/app_store_data.csv
+```
+
 4. Import from existing CSV only:
 
 ```bash
 python main.py --csv data/app_store_data.csv
 ```
+
+If your CSV uses tab as delimiter:
+
+```bash
+python main.py --csv data/app_store_data.csv --delimiter "\t"
+```
+
+## FastAPI + Swagger
+
+Run API server:
+
+```bash
+uvicorn api:app --reload
+```
+
+Open Swagger UI in browser:
+
+- http://127.0.0.1:8000/docs
+
+Main endpoints:
+
+- GET `/health`
+- POST `/generate-csv`
+- POST `/import-data`
+
+Delimiter examples in Swagger / query:
+
+- Generate with semicolon: `/generate-csv?rows=1000&delimiter=;`
+- Import semicolon CSV: `/import-data?csv_path=data/app_store_data.csv&delimiter=;`
+- Use tab delimiter: pass `delimiter=\t`
 
 ## Notes
 

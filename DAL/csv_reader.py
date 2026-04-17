@@ -5,8 +5,19 @@ from .interfaces import ICSVReader
 
 
 class CSVReader(ICSVReader):
-    def __init__(self, filepath: str) -> None:
+    def __init__(self, filepath: str, delimiter: str = ",") -> None:
         self.filepath = filepath
+        self.delimiter = self._normalize_delimiter(delimiter)
+
+    @staticmethod
+    def _normalize_delimiter(delimiter: str) -> str:
+        if delimiter == "\\t":
+            return "\t"
+        if not delimiter:
+            raise ValueError("Delimiter cannot be empty.")
+        if len(delimiter) != 1:
+            raise ValueError("Delimiter must be exactly one character (or \\t for tab).")
+        return delimiter
 
     @staticmethod
     def _to_bool(value: str):
@@ -40,7 +51,7 @@ class CSVReader(ICSVReader):
     def read_from_csv(self):
         data = []
         with open(self.filepath, mode="r", encoding="utf-8") as csv_file:
-            reader = csv.DictReader(csv_file)
+            reader = csv.DictReader(csv_file, delimiter=self.delimiter)
             for raw in reader:
                 row = {
                     "developer_username": raw["developer_username"],

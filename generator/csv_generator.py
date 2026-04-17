@@ -6,9 +6,20 @@ from datetime import date, timedelta
 
 
 class CSVGenerator:
-    def __init__(self, filepath: str = "data/app_store_data.csv", rows: int = 1000) -> None:
+    def __init__(self, filepath: str = "data/app_store_data.csv", rows: int = 1000, delimiter: str = ",") -> None:
         self.filepath = filepath
         self.rows = max(rows, 1000)
+        self.delimiter = self._normalize_delimiter(delimiter)
+
+    @staticmethod
+    def _normalize_delimiter(delimiter: str) -> str:
+        if delimiter == "\\t":
+            return "\t"
+        if not delimiter:
+            raise ValueError("Delimiter cannot be empty.")
+        if len(delimiter) != 1:
+            raise ValueError("Delimiter must be exactly one character (or \\t for tab).")
+        return delimiter
 
     def _random_date(self, start_year: int = 2024, end_year: int = 2026) -> date:
         start = date(start_year, 1, 1)
@@ -92,7 +103,7 @@ class CSVGenerator:
         ]
 
         with open(self.filepath, mode="w", newline="", encoding="utf-8") as csv_file:
-            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+            writer = csv.DictWriter(csv_file, fieldnames=fieldnames, delimiter=self.delimiter)
             writer.writeheader()
             for idx in range(1, self.rows + 1):
                 writer.writerow(self._build_row(idx))
@@ -104,9 +115,10 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Generate app-store CSV data (min 1000 rows).")
     parser.add_argument("--rows", type=int, default=1000, help="Number of rows to generate (minimum 1000).")
     parser.add_argument("--out", default="data/app_store_data.csv", help="Output CSV file path.")
+    parser.add_argument("--delimiter", default=",", help="CSV delimiter. Use \\t for tab.")
     args = parser.parse_args()
 
-    generator = CSVGenerator(filepath=args.out, rows=args.rows)
+    generator = CSVGenerator(filepath=args.out, rows=args.rows, delimiter=args.delimiter)
     output_path = generator.generate_csv()
     print(f"Generated {generator.rows} rows into {output_path}")
 

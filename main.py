@@ -9,8 +9,8 @@ from DAL.db_repository import DBRepository
 from generator.csv_generator import CSVGenerator
 
 
-def build_service(csv_path: str) -> GooglePlayService:
-    csv_reader = CSVReader(csv_path)
+def build_service(csv_path: str, delimiter: str = ",") -> GooglePlayService:
+    csv_reader = CSVReader(csv_path, delimiter=delimiter)
     db_models = DBModels(engine)
     db_repository = DBRepository(session)
     return GooglePlayService(csv_reader, db_models, db_repository)
@@ -25,11 +25,12 @@ def main() -> None:
         help="Generate CSV before importing (minimum 1000 rows).",
     )
     parser.add_argument("--rows", type=int, default=1000, help="Rows to generate when --generate is used.")
+    parser.add_argument("--delimiter", default=",", help="CSV delimiter for generate/import. Use \\t for tab.")
     args = parser.parse_args()
 
     if args.generate:
         print(f"Generating CSV with {args.rows} rows at {args.csv}...")
-        output = CSVGenerator(filepath=args.csv, rows=args.rows).generate_csv()
+        output = CSVGenerator(filepath=args.csv, rows=args.rows, delimiter=args.delimiter).generate_csv()
         print(f"CSV generated: {output}")
 
     # if not os.path.exists(args.csv):
@@ -41,7 +42,7 @@ def main() -> None:
             raise FileNotFoundError(f"CSV file not found: {args.csv}")
 
 
-    service = build_service(args.csv)
+    service = build_service(args.csv, delimiter=args.delimiter)
     print("Starting import process...")
     service.run_import()
     print("Import completed successfully.")
