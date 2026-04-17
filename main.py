@@ -4,7 +4,7 @@ import os
 from BLL.service import GooglePlayService
 from DAL import engine, session
 from DAL.csv_reader import CSVReader
-from DAL.db_models import DBModels
+from DAL.db_models import Base, DBModels
 from DAL.db_repository import DBRepository
 from generator.csv_generator import CSVGenerator
 
@@ -14,6 +14,10 @@ def build_service(csv_path: str, delimiter: str = ",") -> GooglePlayService:
     db_models = DBModels(engine)
     db_repository = DBRepository(session)
     return GooglePlayService(csv_reader, db_models, db_repository)
+
+def clear_database() -> None:
+    session.rollback()
+    Base.metadata.drop_all(engine)
 
 
 def main() -> None:
@@ -26,7 +30,15 @@ def main() -> None:
     )
     parser.add_argument("--rows", type=int, default=1000, help="Rows to generate when --generate is used.")
     parser.add_argument("--delimiter", default=",", help="CSV delimiter for generate/import. Use \\t for tab.")
+    parser.add_argument("--clear", action="store_true", help="Drop all database tables and exit (unless --generate is also set).")
     args = parser.parse_args()
+
+    if args.clear:
+        print("Clearing database (dropping all tables)...")
+        clear_database()
+        print("Database cleared.")
+        if not args.generate:
+            return
 
     if args.generate:
         print(f"Generating CSV with {args.rows} rows at {args.csv}...")

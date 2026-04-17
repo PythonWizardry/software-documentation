@@ -90,3 +90,7 @@ Delimiter examples in Swagger / query:
 
 - The generator enforces minimum 1000 rows.
 - Database file is created locally as SQLite.
+
+
+-Vety important note:
+🧐🧐🧐You must use the same delimiter when generating csv and then when importing to DB
