@@ -8,6 +8,7 @@ from .db_models import (
     Review,
     Transaction,
 )
+from sqlalchemy import delete, insert, update
 from .interfaces import IDBRepository
 
 
@@ -150,3 +151,115 @@ class DBRepository(IDBRepository):
         except Exception:
             self.session.rollback()
             raise
+
+    def list_applications(self):
+        return self.session.query(Application).order_by(Application.app_id.desc()).all()
+
+    def get_application(self, app_id: int):
+        return self.session.query(Application).filter_by(app_id=app_id).first()
+
+    def create_application(self, payload: dict):
+        developer = self.session.query(Developer).filter_by(email=payload["developer_email"]).first()
+        if developer is None:
+            developer = Developer(
+                username=payload["developer_username"],
+                email=payload["developer_email"],
+                developer_name=payload["developer_name"],
+                website=payload.get("developer_website"),
+            )
+            self.session.add(developer)
+            self.session.flush()
+
+        app_type = payload["application_type"]
+        if app_type == "paid_application":
+            app = PaidApplication(
+                title=payload["title"],
+                version=payload["version"],
+                price=payload["price"],
+                developer=developer,
+            )
+        else:
+            app = FreeApplication(
+                title=payload["title"],
+                version=payload["version"],
+                contains_ads=payload["contains_ads"],
+                developer=developer,
+            )
+
+        self.session.add(app)
+        self.session.commit()
+        self.session.refresh(app)
+        return app
+
+    def update_application(self, app_id: int, payload: dict):
+        app = self.get_application(app_id)
+        if app is None:
+            return None
+
+        target_type = payload["application_type"]
+
+        if app.app_type != target_type:
+            if app.app_type == "paid_application" and target_type == "free_application":
+                has_transactions = (
+                    self.session.query(Transaction)
+                    .filter_by(paid_application_id=app_id)
+                    .first()
+                    is not None
+                )
+                if has_transactions:
+                    raise ValueError("Cannot switch paid application to free while transactions exist.")
+
+            app_table = Application.__table__
+            free_table = FreeApplication.__table__
+            paid_table = PaidApplication.__table__
+
+            self.session.execute(
+                update(app_table)
+                .where(app_table.c.app_id == app_id)
+                .values(
+                    title=payload["title"],
+                    version=payload["version"],
+                    app_type=target_type,
+                )
+            )
+
+            if target_type == "paid_application":
+                self.session.execute(delete(free_table).where(free_table.c.app_id == app_id))
+                self.session.execute(
+                    insert(paid_table).values(
+                        app_id=app_id,
+                        price=payload["price"],
+                    )
+                )
+            else:
+                self.session.execute(delete(paid_table).where(paid_table.c.app_id == app_id))
+                self.session.execute(
+                    insert(free_table).values(
+                        app_id=app_id,
+                        contains_ads=payload["contains_ads"],
+                    )
+                )
+
+            self.session.commit()
+            return self.get_application(app_id)
+
+        app.title = payload["title"]
+        app.version = payload["version"]
+
+        if isinstance(app, PaidApplication):
+            app.price = payload["price"]
+        if isinstance(app, FreeApplication):
+            app.contains_ads = payload["contains_ads"]
+
+        self.session.commit()
+        self.session.refresh(app)
+        return app
+
+    def delete_application(self, app_id: int):
+        app = self.get_application(app_id)
+        if app is None:
+            return False
+
+        self.session.delete(app)
+        self.session.commit()
+        return True

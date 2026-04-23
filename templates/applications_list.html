@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Applications{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="header">
+        <div>
+            <h1 class="title">Google Play Applications</h1>
+            <p class="subtitle">Main entity for Lab 3 MVC implementation</p>
+        </div>
+        <a class="btn btn-primary" href="/applications/create">Add Application</a>
+    </div>
+
+    {% if applications %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Version</th>
+                <th>Type</th>
+                <th>Developer</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for app in applications %}
+            <tr>
+                <td>{{ app.app_id }}</td>
+                <td>{{ app.title }}</td>
+                <td>{{ app.version }}</td>
+                <td>{{ app.app_type }}</td>
+                <td>{{ app.developer.developer_name }}</td>
+                <td>
+                    <div class="actions">
+                        <a class="btn btn-secondary" href="/applications/{{ app.app_id }}">View</a>
+                        <a class="btn btn-secondary" href="/applications/{{ app.app_id }}/edit">Edit</a>
+                        <form method="post" action="/applications/{{ app.app_id }}/delete" style="margin:0;">
+                            <button class="btn btn-danger" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="meta">No applications yet. Create the first one.</p>
+    {% endif %}
+</div>
+{% endblock %}

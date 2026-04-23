@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Application Details{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="header">
+        <div>
+            <h1 class="title">{{ application.title }}</h1>
+            <p class="subtitle">Application #{{ application.app_id }}</p>
+        </div>
+        <div class="actions">
+            <a class="btn btn-secondary" href="/applications">Back</a>
+            <a class="btn btn-primary" href="/applications/{{ application.app_id }}/edit">Edit</a>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div>
+            <p class="meta"><strong>Version:</strong> {{ application.version }}</p>
+            <p class="meta"><strong>Type:</strong> {{ application.app_type }}</p>
+            {% if application.app_type == "free_application" %}
+            <p class="meta"><strong>Contains ads:</strong> {{ "Yes" if application.contains_ads else "No" }}</p>
+            {% endif %}
+            {% if application.app_type == "paid_application" %}
+            <p class="meta"><strong>Price:</strong> ${{ '%.2f'|format(application.price) }}</p>
+            {% endif %}
+        </div>
+
+        <div>
+            <p class="meta"><strong>Developer:</strong> {{ application.developer.developer_name }}</p>
+            <p class="meta"><strong>Developer email:</strong> {{ application.developer.email }}</p>
+            <p class="meta"><strong>Developer website:</strong> {{ application.developer.website or "-" }}</p>
+        </div>
+    </div>
+
+    <form method="post" action="/applications/{{ application.app_id }}/delete" style="margin-top: 18px;">
+        <button class="btn btn-danger" type="submit">Delete Application</button>
+    </form>
+</div>
+{% endblock %}
