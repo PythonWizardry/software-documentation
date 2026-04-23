@@ -34,7 +34,12 @@
         </div>
     </div>
 
-    <form method="post" action="/applications/{{ application.app_id }}/delete" style="margin-top: 18px;">
+    <form
+        method="post"
+        action="/applications/{{ application.app_id }}/delete"
+        style="margin-top: 18px;"
+        data-confirm-message="Are you sure you want to delete application '{{ application.title }}'?"
+    >
         <button class="btn btn-danger" type="submit">Delete Application</button>
     </form>
 </div>

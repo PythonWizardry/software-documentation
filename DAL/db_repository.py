@@ -260,6 +260,14 @@ class DBRepository(IDBRepository):
         if app is None:
             return False
 
-        self.session.delete(app)
-        self.session.commit()
-        return True
+        try:
+            # Transactions reference paid applications via NOT NULL FK,
+            # so they must be removed before deleting the application.
+            self.session.query(Transaction).filter_by(paid_application_id=app_id).delete(synchronize_session=False)
+
+            self.session.delete(app)
+            self.session.commit()
+            return True
+        except Exception:
+            self.session.rollback()
+            raise

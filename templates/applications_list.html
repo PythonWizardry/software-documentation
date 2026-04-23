@@ -36,7 +36,12 @@
                     <div class="actions">
                         <a class="btn btn-secondary" href="/applications/{{ app.app_id }}">View</a>
                         <a class="btn btn-secondary" href="/applications/{{ app.app_id }}/edit">Edit</a>
-                        <form method="post" action="/applications/{{ app.app_id }}/delete" style="margin:0;">
+                        <form
+                            method="post"
+                            action="/applications/{{ app.app_id }}/delete"
+                            style="margin:0;"
+                            data-confirm-message="Are you sure you want to delete application '{{ app.title }}'?"
+                        >
                             <button class="btn btn-danger" type="submit">Delete</button>
                         </form>
                     </div>

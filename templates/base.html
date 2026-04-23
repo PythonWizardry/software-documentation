@@ -143,5 +143,18 @@
     <div class="container">
         {% block content %}{% endblock %}
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const forms = document.querySelectorAll("form[data-confirm-message]");
+            forms.forEach(function (form) {
+                form.addEventListener("submit", function (event) {
+                    const message = form.getAttribute("data-confirm-message") || "Are you sure?";
+                    if (!window.confirm(message)) {
+                        event.preventDefault();
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
