@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}{{ "Create Application" if form_mode == "create" else "Edit Application" }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="header">
+        <div>
+            <h1 class="title">{{ "Create Application" if form_mode == "create" else "Edit Application" }}</h1>
+            <p class="subtitle">Fill in the form to persist data through BLL and DAL layers</p>
+        </div>
+        <a class="btn btn-secondary" href="/applications">Back</a>
+    </div>
+
+    {% if error %}
+    <p class="error">{{ error }}</p>
+    {% endif %}
+
+    {% set selected_type = application.application_type if application and application.application_type else (application.app_type if application and application.app_type else 'free_application') %}
+
+    <form method="post" action="{{ action_url }}">
+        <div class="grid">
+            <div class="field">
+                <label>Title</label>
+                <input name="title" value="{{ application.title if application else '' }}" required />
+            </div>
+
+            <div class="field">
+                <label>Version</label>
+                <input name="version" value="{{ application.version if application else '' }}" required />
+            </div>
+
+            <div class="field">
+                <label>Application Type</label>
+                <select name="application_type" id="application_type" required>
+                    <option value="free_application" {% if selected_type == 'free_application' %}selected{% endif %}>Free Application</option>
+                    <option value="paid_application" {% if selected_type == 'paid_application' %}selected{% endif %}>Paid Application</option>
+                </select>
+            </div>
+
+            <div class="field" id="price_field">
+                <label>Price</label>
+                <input type="number" min="0" step="0.01" name="price" value="{{ application.price if application and application.price is defined else 0 }}" />
+            </div>
+
+            <div class="field" id="contains_ads_field">
+                <label>Contains Ads</label>
+                <select name="contains_ads">
+                    {% if application and application.contains_ads is defined and application.contains_ads %}
+                    <option value="1" selected>Yes</option>
+                    <option value="0">No</option>
+                    {% else %}
+                    <option value="0" selected>No</option>
+                    <option value="1">Yes</option>
+                    {% endif %}
+                </select>
+            </div>
+
+            {% if form_mode == "create" %}
+            <div class="field">
+                <label>Developer Username</label>
+                <input name="developer_username" value="{{ application.developer_username if application and application.developer_username else '' }}" required />
+            </div>
+            <div class="field">
+                <label>Developer Email</label>
+                <input type="email" name="developer_email" value="{{ application.developer_email if application and application.developer_email else '' }}" required />
+            </div>
+            <div class="field">
+                <label>Developer Name</label>
+                <input name="developer_name" value="{{ application.developer_name if application and application.developer_name else '' }}" required />
+            </div>
+            <div class="field">
+                <label>Developer Website</label>
+                <input name="developer_website" value="{{ application.developer_website if application and application.developer_website else '' }}" />
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="actions" style="margin-top: 16px;">
+            <button class="btn btn-primary" type="submit">{{ "Create" if form_mode == "create" else "Save Changes" }}</button>
+            <a class="btn btn-secondary" href="/applications">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    const appType = document.getElementById("application_type");
+    const priceField = document.getElementById("price_field");
+    const adsField = document.getElementById("contains_ads_field");
+
+    function syncFields() {
+        const isPaid = appType.value === "paid_application";
+        priceField.style.display = isPaid ? "block" : "none";
+        adsField.style.display = isPaid ? "none" : "block";
+    }
+
+    appType.addEventListener("change", syncFields);
+    syncFields();
+</script>
+{% endblock %}
