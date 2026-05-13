@@ -5,6 +5,12 @@ __pycache__/
 *.py[cod]
 test_main.py
 
+# secrets
+bahda-9737d-firebase-adminsdk-fbsvc-a8663aa3d7.json
+.env
+.env.*
+.envrc
+
 
 # database file
 # *.db

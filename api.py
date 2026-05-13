@@ -1,8 +1,14 @@
+import json
+import os
 from pathlib import Path
+from typing import Any
 
 from fastapi import FastAPI, Form, HTTPException, Query, Request
-from fastapi.responses import RedirectResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
+import firebase_admin
+from firebase_admin import auth, credentials, initialize_app
+from starlette.middleware.sessions import SessionMiddleware
 
 from BLL.service import GooglePlayService
 from DAL import engine, session
@@ -18,6 +24,12 @@ app = FastAPI(
     version="1.0.0",
 )
 templates = Jinja2Templates(directory="templates")
+
+SESSION_SECRET_KEY = os.environ.get("SESSION_SECRET_KEY", "change-me")
+FIREBASE_CREDENTIALS = os.environ.get("FIREBASE_CREDENTIALS")
+FIREBASE_WEB_CONFIG = os.environ.get("FIREBASE_WEB_CONFIG")
+FIREBASE_WEB_CONFIG_DATA: dict[str, Any] | None = None
+
 
 
 def build_service(csv_path: str, delimiter: str = ",") -> GooglePlayService:
@@ -38,14 +50,109 @@ def _bool_from_form(value: str | None) -> bool:
     return value in {"1", "true", "on", "yes"}
 
 
+def _init_firebase() -> None:
+    global FIREBASE_WEB_CONFIG_DATA
+    if not FIREBASE_CREDENTIALS:
+        raise RuntimeError("FIREBASE_CREDENTIALS env var is required.")
+    if not FIREBASE_WEB_CONFIG:
+        raise RuntimeError("FIREBASE_WEB_CONFIG env var is required.")
+    try:
+        FIREBASE_WEB_CONFIG_DATA = json.loads(FIREBASE_WEB_CONFIG)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError("FIREBASE_WEB_CONFIG must be valid JSON.") from exc
+    cred = credentials.Certificate(FIREBASE_CREDENTIALS)
+    if not firebase_admin._apps:
+        initialize_app(cred)
+
+
+def _get_user(request: Request) -> dict[str, Any] | None:
+    return request.session.get("user")
+
+
+def _is_public_path(path: str) -> bool:
+    if path in {"/login", "/auth/login", "/logout", "/favicon.ico"}:
+        return True
+    if path.startswith("/static/"):
+        return True
+    return False
+
+
 @app.on_event("startup")
 def startup_event() -> None:
     DBModels(engine).create_tables()
+    _init_firebase()
+
+
+@app.middleware("http")
+async def require_authentication(request: Request, call_next):
+    if _is_public_path(request.url.path):
+        return await call_next(request)
+
+    user = _get_user(request)
+    if user:
+        return await call_next(request)
+
+    accept = request.headers.get("accept", "")
+    if "text/html" in accept or request.url.path.startswith("/applications"):
+        return RedirectResponse(url="/login", status_code=303)
+
+    return JSONResponse({"detail": "Not authenticated"}, status_code=401)
+
+
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=SESSION_SECRET_KEY,
+    max_age=60 * 60 * 24,
+    same_site="lax",
+)
 
 
 @app.get("/")
 def root_redirect() -> RedirectResponse:
     return RedirectResponse(url="/applications", status_code=303)
+
+
+@app.get("/login")
+def login_page(request: Request):
+    if _get_user(request):
+        return RedirectResponse(url="/applications", status_code=303)
+
+    return templates.TemplateResponse(
+        request,
+        "login.html",
+        {
+            "firebase_config": FIREBASE_WEB_CONFIG_DATA,
+            "user": None,
+        },
+    )
+
+
+@app.post("/auth/login")
+async def auth_login(request: Request) -> JSONResponse:
+    payload = await request.json()
+    id_token = payload.get("idToken") if isinstance(payload, dict) else None
+    if not id_token:
+        raise HTTPException(status_code=400, detail="idToken is required")
+
+    try:
+        decoded = auth.verify_id_token(id_token)
+    except Exception as exc:
+        raise HTTPException(status_code=401, detail=f"Invalid token: {exc}") from exc
+
+    request.session["user"] = {
+        "uid": decoded.get("uid"),
+        "email": decoded.get("email"),
+        "name": decoded.get("name"),
+        "picture": decoded.get("picture"),
+    }
+
+    return JSONResponse({"message": "Login successful", "next": "/applications"})
+
+
+@app.get("/logout")
+def logout(request: Request) -> RedirectResponse:
+    request.session.clear()
+    return RedirectResponse(url="/login", status_code=303)
 
 
 @app.get("/applications")
@@ -55,7 +162,7 @@ def list_applications(request: Request):
     return templates.TemplateResponse(
         request,
         "applications_list.html",
-        {"applications": applications},
+        {"applications": applications, "user": _get_user(request)},
     )
 
 
@@ -69,6 +176,7 @@ def create_application_form(request: Request):
             "action_url": "/applications/create",
             "application": None,
             "error": None,
+            "user": _get_user(request),
         },
     )
 
@@ -109,6 +217,7 @@ def create_application(
                 "action_url": "/applications/create",
                 "application": payload,
                 "error": str(exc),
+                "user": _get_user(request),
             },
             status_code=400,
         )
@@ -125,7 +234,7 @@ def application_details(request: Request, app_id: int):
     return templates.TemplateResponse(
         request,
         "application_details.html",
-        {"application": application},
+        {"application": application, "user": _get_user(request)},
     )
 
 
@@ -143,6 +252,7 @@ def edit_application_form(request: Request, app_id: int):
             "action_url": f"/applications/{app_id}/edit",
             "application": application,
             "error": None,
+                "user": _get_user(request),
         },
     )
 
@@ -181,6 +291,7 @@ def edit_application(
                 "action_url": f"/applications/{app_id}/edit",
                 "application": payload,
                 "error": str(exc),
+                "user": _get_user(request),
             },
             status_code=400,
         )

@@ -39,6 +39,22 @@ pip install -r requirements.txt
 uvicorn api:app --reload
 ```
 
+### Google Login (Firebase)
+
+This lab requires Google login via Firebase. Configure these environment variables before running the app:
+
+- `SESSION_SECRET_KEY` - random string for session signing.
+- `FIREBASE_CREDENTIALS` - path to Firebase service account JSON file.
+- `FIREBASE_WEB_CONFIG` - Firebase web config JSON string (from Firebase Console).
+
+Example (PowerShell):
+
+```powershell
+$env:SESSION_SECRET_KEY = "change-this"
+$env:FIREBASE_CREDENTIALS = "C:\path\to\serviceAccount.json"
+$env:FIREBASE_WEB_CONFIG = '{"apiKey":"...","authDomain":"...","projectId":"...","appId":"..."}'
+```
+
 3. Open browser:
 
 - MVC pages: http://127.0.0.1:8000/applications

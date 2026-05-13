@@ -141,6 +141,16 @@
 </head>
 <body>
     <div class="container">
+        {% if user %}
+        <div class="card" style="margin-bottom: 16px;">
+            <div class="header" style="margin-bottom: 0;">
+                <div>
+                    <p class="subtitle" style="margin:0;">Signed in as {{ user.name or user.email or "User" }}</p>
+                </div>
+                <a class="btn btn-secondary" href="/logout">Log out</a>
+            </div>
+        </div>
+        {% endif %}
         {% block content %}{% endblock %}
     </div>
     <script>
