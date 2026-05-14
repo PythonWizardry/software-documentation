@@ -1,0 +1,23 @@
+output:
+  strategy: redis
+
+# NYPD Shooting Incident Data (Year To Date)
+dataset:
+  url: "https://data.cityofnewyork.us/resource/5ucz-vwe8.json"
+  local_path: "data/dataset.csv"
+  limit: 200
+  force_download: false
+
+kafka:
+  bootstrap_servers: "localhost:9092"
+  topic: "nypd_shootings"
+  client_id: "lab4_producer"
+
+redis:
+  host: "localhost"
+  port: 6379
+  db: 0
+  password: null
+  key_prefix: "nypd_shootings"
+  storage_type: "list"   # list | hash | stream
+  ttl: null
